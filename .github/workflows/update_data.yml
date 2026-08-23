@@ -39,6 +39,13 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install chromium
 
+      - name: Validate email configuration
+        run: |
+          if [ -z "${{ secrets.EMAIL_USER }}" ] || [ -z "${{ secrets.EMAIL_PASSWORD }}" ] || [ -z "${{ secrets.ALERT_EMAIL }}" ]; then
+            echo "Missing GitHub Actions secrets: EMAIL_USER, EMAIL_PASSWORD, ALERT_EMAIL"
+            exit 1
+          fi
+
       - name: Run Hoyo vacancy monitor
         env:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}

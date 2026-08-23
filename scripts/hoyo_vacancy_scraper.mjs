@@ -51,13 +51,19 @@ function isOpenStatus(status) {
   return ['全て空き', '一部空き'].includes(status);
 }
 
+function getEmailConfig() {
+  return {
+    smtpUser: process.env.EMAIL_USER || process.env.GMAIL_USER,
+    smtpPassword: process.env.EMAIL_PASSWORD || process.env.GMAIL_APP_PASSWORD,
+    recipient: process.env.ALERT_EMAIL || process.env.EMAIL_TO,
+  };
+}
+
 async function sendEmailNotification(alerts) {
-  const smtpUser = process.env.EMAIL_USER || process.env.GMAIL_USER;
-  const smtpPassword = process.env.EMAIL_PASSWORD || process.env.GMAIL_APP_PASSWORD;
-  const recipient = process.env.ALERT_EMAIL || process.env.EMAIL_TO;
+  const { smtpUser, smtpPassword, recipient } = getEmailConfig();
 
   if (!smtpUser || !smtpPassword || !recipient) {
-    console.log('Email SMTP settings are not configured. Skipping email notification.');
+    console.error('Email SMTP settings are not configured. Required: EMAIL_USER/GMAIL_USER, EMAIL_PASSWORD/GMAIL_APP_PASSWORD, ALERT_EMAIL. Skipping email notification.');
     return;
   }
 
@@ -158,10 +164,17 @@ const filtered = currentRecords.filter((record) => isTargetDate(record.date));
 const previousSet = new Set(previousRecords.map((record) => `${record.date}|${record.status}`));
 let newAlerts = filtered.filter((record) => isOpenStatus(record.status) && !previousSet.has(`${record.date}|${record.status}`));
 
+const hasEmailConfig = Boolean(getEmailConfig().smtpUser && getEmailConfig().smtpPassword && getEmailConfig().recipient);
+
 if (process.env.FORCE_EMAIL_TEST === 'true' || process.env.FORCE_LINE_TEST === 'true') {
   const testDate = formatDate(addDays(new Date(), 7));
   newAlerts = [{ facility: 'テスト送信', date: testDate, status: '全て空き' }];
   console.log('FORCE_EMAIL_TEST=true: sending a test email alert.');
+
+  if (!hasEmailConfig) {
+    console.error('Test email requested but SMTP credentials are missing. Add EMAIL_USER/EMAIL_PASSWORD and ALERT_EMAIL in GitHub Actions secrets.');
+    process.exitCode = 1;
+  }
 }
 
 await fs.mkdir(path.dirname(OUTPUT_PATH), { recursive: true });
