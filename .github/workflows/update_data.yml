@@ -2,7 +2,7 @@ name: Hoyo Vacancy Monitor
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/1 * * * *'
   workflow_dispatch:
     inputs:
       force_email_test:
