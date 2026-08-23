@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       force_email_test:
-        description: 'テストメールを送る（通知確認用）'
+        description: 'チE��トメールを送る�E�通知確認用�E�E
         required: false
         default: 'false'
         type: choice
@@ -50,7 +50,7 @@ jobs:
         env:
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+          ALERT_EMAIL: dlo_olbbb@yahoo.co.jp
           GMAIL_USER: ${{ secrets.EMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           FORCE_EMAIL_TEST: ${{ github.event.inputs.force_email_test || 'false' }}
@@ -79,7 +79,8 @@ jobs:
           echo "## Vacancy monitor" >> "$GITHUB_STEP_SUMMARY"
           echo "- Timestamp: $(date -u)" >> "$GITHUB_STEP_SUMMARY"
           if [ "${{ steps.changes.outputs.has_changes }}" = "true" ]; then
-            echo "- Status: ✅ data updated" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Status: ✁Edata updated" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "- Status: ℹ️ no change" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Status: ℹ�E�Eno change" >> "$GITHUB_STEP_SUMMARY"
           fi
+
