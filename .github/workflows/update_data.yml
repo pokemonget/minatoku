@@ -1,8 +1,11 @@
 name: Hoyo Vacancy Monitor
 
 on:
+  push:
+    branches:
+      - main
   schedule:
-    - cron: '*/1 * * * *'
+    - cron: '*/5 * * * *'
   workflow_dispatch:
     inputs:
       force_email_test:
@@ -22,6 +25,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Show trigger metadata
+        run: |
+          echo "event_name=${{ github.event_name }}"
+          echo "ref=${{ github.ref }}"
+          echo "run_at=$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          echo "repository=${{ github.repository }}"
+          echo "workflow_sha=${{ github.sha }}"
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
