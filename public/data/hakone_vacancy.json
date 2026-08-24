@@ -158,7 +158,7 @@
   ],
   "lastNotified": {},
   "flags": {},
-  "lastCheckedAt": "2026-08-24T09:41:30.447Z",
-  "runSource": "manual",
-  "workflowTrigger": "manual"
+  "lastCheckedAt": "2026-08-24T10:04:14.283Z",
+  "runSource": "github-actions",
+  "workflowTrigger": "push"
 }
