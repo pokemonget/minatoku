@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       force_email_test:
-        description: 'チE��トメールを送る�E�通知確認用�E�E
+        description: 'テストメールを送るかどうかの確認用'
         required: false
         default: 'false'
         type: choice
@@ -40,21 +40,33 @@ jobs:
         run: npx playwright install chromium
 
       - name: Validate email configuration
+        env:
+          GH_EMAIL_USER: ${{ secrets.EMAIL_USER || secrets.GMAIL_USER || secrets.SMTP_USER }}
+          GH_EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD || secrets.GMAIL_APP_PASSWORD || secrets.SMTP_PASSWORD }}
+          GH_ALERT_EMAIL: ${{ secrets.ALERT_EMAIL || secrets.EMAIL_TO || secrets.NOTIFY_EMAIL }}
         run: |
-          if [ -z "${{ secrets.EMAIL_USER }}" ] || [ -z "${{ secrets.EMAIL_PASSWORD }}" ] || [ -z "${{ secrets.ALERT_EMAIL }}" ]; then
-            echo "Missing GitHub Actions secrets: EMAIL_USER, EMAIL_PASSWORD, ALERT_EMAIL"
+          if [ -z "$GH_EMAIL_USER" ] || [ -z "$GH_EMAIL_PASSWORD" ] || [ -z "$GH_ALERT_EMAIL" ]; then
+            echo "Missing required GitHub Actions SMTP secrets. Accepted names: EMAIL_USER/GMAIL_USER/SMTP_USER, EMAIL_PASSWORD/GMAIL_APP_PASSWORD/SMTP_PASSWORD, ALERT_EMAIL/EMAIL_TO/NOTIFY_EMAIL"
             exit 1
           fi
 
       - name: Run Hoyo vacancy monitor
         env:
-          EMAIL_USER: ${{ secrets.EMAIL_USER }}
-          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-          ALERT_EMAIL: dlo_olbbb@yahoo.co.jp
-          GMAIL_USER: ${{ secrets.EMAIL_USER }}
-          GMAIL_APP_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-          FORCE_EMAIL_TEST: ${{ github.event.inputs.force_email_test || 'false' }}
-        run: node scripts/hoyo_vacancy_scraper.mjs
+          TZ: Asia/Tokyo
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER || secrets.GMAIL_USER || secrets.SMTP_USER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD || secrets.GMAIL_APP_PASSWORD || secrets.SMTP_PASSWORD }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL || secrets.EMAIL_TO || secrets.NOTIFY_EMAIL }}
+          GMAIL_USER: ${{ secrets.EMAIL_USER || secrets.GMAIL_USER || secrets.SMTP_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.EMAIL_PASSWORD || secrets.GMAIL_APP_PASSWORD || secrets.SMTP_PASSWORD }}
+          FORCE_EMAIL_TEST: ${{ github.event.inputs.force_email_test || 'true' }}
+          NOTIFY_EVERY_RUN: 'true'
+        run: |
+          echo "Workflow trigger: $GITHUB_EVENT_NAME"
+          echo "SMTP user source: ${EMAIL_USER:+configured}"
+          echo "SMTP recipient source: ${ALERT_EMAIL:+configured}"
+          echo "Temporary verification mode: every scheduled run will email for proof."
+          node scripts/hoyo_vacancy_scraper.mjs
 
       - name: Check for data changes
         id: changes
@@ -78,9 +90,11 @@ jobs:
         run: |
           echo "## Vacancy monitor" >> "$GITHUB_STEP_SUMMARY"
           echo "- Timestamp: $(date -u)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Run source: github-actions cron/workflow_dispatch" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Trigger: ${{ github.event_name }}" >> "$GITHUB_STEP_SUMMARY"
           if [ "${{ steps.changes.outputs.has_changes }}" = "true" ]; then
-            echo "- Status: ✁Edata updated" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Status: data updated" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "- Status: ℹ�E�Eno change" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Status: no change" >> "$GITHUB_STEP_SUMMARY"
           fi
 
