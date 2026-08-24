@@ -317,40 +317,23 @@ async function main() {
   const hasEmailConfig = Boolean(getEmailConfig().smtpUser && getEmailConfig().smtpPassword && getEmailConfig().recipient);
 
   let newAlerts = alertCandidates;
-  const shouldNotifyEveryRun = process.env.NOTIFY_EVERY_RUN === 'true';
-
-  if (process.env.FORCE_EMAIL_TEST === 'true' || process.env.FORCE_LINE_TEST === 'true' || shouldNotifyEveryRun) {
-    if (shouldNotifyEveryRun) {
-      if (alertCandidates.length > 0) {
-        newAlerts = alertCandidates;
-      } else {
-        newAlerts = [{
-          facility: FACILITY_NAME,
-          date: formatDate(getTokyoNow()),
-          status: '自動実行確認: 空きなし',
-          category: '自動実行確認',
-          kind: 'opened',
-        }];
-      }
-      console.log('NOTIFY_EVERY_RUN=true: sending a verification email on every scheduled run, regardless of vacancy status.');
-    } else {
-      const today = new Date();
-      const nextSaturday = new Date(today);
-      nextSaturday.setHours(0, 0, 0, 0);
-      while (nextSaturday.getDay() !== 6) {
-        nextSaturday.setDate(nextSaturday.getDate() + 1);
-      }
-
-      const otherDate = addDays(nextSaturday, 2);
-      const weekendDate = formatDate(nextSaturday);
-      const otherDateString = formatDate(otherDate);
-
-      newAlerts = [
-        { facility: 'テスト送信', date: weekendDate, status: '全て空き', category: '土曜・祝前日' },
-        { facility: 'テスト送信', date: otherDateString, status: '一部空き', category: 'その他日' },
-      ];
-      console.log('FORCE_EMAIL_TEST=true: sending a test email alert with both sections.');
+  if (process.env.FORCE_EMAIL_TEST === 'true' || process.env.FORCE_LINE_TEST === 'true') {
+    const today = new Date();
+    const nextSaturday = new Date(today);
+    nextSaturday.setHours(0, 0, 0, 0);
+    while (nextSaturday.getDay() !== 6) {
+      nextSaturday.setDate(nextSaturday.getDate() + 1);
     }
+
+    const otherDate = addDays(nextSaturday, 2);
+    const weekendDate = formatDate(nextSaturday);
+    const otherDateString = formatDate(otherDate);
+
+    newAlerts = [
+      { facility: 'テスト送信', date: weekendDate, status: '全て空き', category: '土曜・祝前日' },
+      { facility: 'テスト送信', date: otherDateString, status: '一部空き', category: 'その他日' },
+    ];
+    console.log('FORCE_EMAIL_TEST=true: sending a test email alert with both sections.');
 
     if (!hasEmailConfig) {
       console.error('Test email requested but SMTP credentials are missing. Add EMAIL_USER/EMAIL_PASSWORD and ALERT_EMAIL in GitHub Actions secrets.');

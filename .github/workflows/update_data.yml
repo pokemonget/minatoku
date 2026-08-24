@@ -59,13 +59,11 @@ jobs:
           ALERT_EMAIL: ${{ secrets.ALERT_EMAIL || secrets.EMAIL_TO || secrets.NOTIFY_EMAIL }}
           GMAIL_USER: ${{ secrets.EMAIL_USER || secrets.GMAIL_USER || secrets.SMTP_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.EMAIL_PASSWORD || secrets.GMAIL_APP_PASSWORD || secrets.SMTP_PASSWORD }}
-          FORCE_EMAIL_TEST: ${{ github.event.inputs.force_email_test || 'true' }}
-          NOTIFY_EVERY_RUN: 'true'
+          FORCE_EMAIL_TEST: ${{ github.event.inputs.force_email_test || 'false' }}
         run: |
           echo "Workflow trigger: $GITHUB_EVENT_NAME"
           echo "SMTP user source: ${EMAIL_USER:+configured}"
           echo "SMTP recipient source: ${ALERT_EMAIL:+configured}"
-          echo "Temporary verification mode: every scheduled run will email for proof."
           node scripts/hoyo_vacancy_scraper.mjs
 
       - name: Check for data changes
