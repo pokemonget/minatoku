@@ -160,7 +160,7 @@
   "flags": {
     "2026-09-01|一部空き": true
   },
-  "lastCheckedAt": "2026-08-25T11:38:15.363Z",
+  "lastCheckedAt": "2026-08-25T12:00:35.522Z",
   "runSource": "github-actions",
   "workflowTrigger": "schedule"
 }
