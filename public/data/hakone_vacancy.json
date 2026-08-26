@@ -161,7 +161,7 @@
     "2026-09-01|一部空き": true,
     "2026-09-16|一部空き": true
   },
-  "lastCheckedAt": "2026-08-26T04:25:34.014Z",
+  "lastCheckedAt": "2026-08-26T05:03:54.502Z",
   "runSource": "github-actions",
   "workflowTrigger": "schedule"
 }
