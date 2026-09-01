@@ -2,11 +2,6 @@
   "records": [
     {
       "facility": "箱根 大平台みなと荘",
-      "date": "2026-09-01",
-      "status": "受付期間外"
-    },
-    {
-      "facility": "箱根 大平台みなと荘",
       "date": "2026-09-02",
       "status": "受付期間外"
     },
@@ -28,7 +23,7 @@
     {
       "facility": "箱根 大平台みなと荘",
       "date": "2026-09-06",
-      "status": "予約あり"
+      "status": "受付期間外"
     },
     {
       "facility": "箱根 大平台みなと荘",
@@ -154,13 +149,18 @@
       "facility": "箱根 大平台みなと荘",
       "date": "2026-10-01",
       "status": "予約あり"
+    },
+    {
+      "facility": "箱根 大平台みなと荘",
+      "date": "2026-10-02",
+      "status": "予約あり"
     }
   ],
   "lastNotified": {},
   "flags": {
     "2026-09-09|一部空き": true
   },
-  "lastCheckedAt": "2026-09-01T11:59:47.569Z",
+  "lastCheckedAt": "2026-09-01T21:54:50.549Z",
   "runSource": "github-actions",
   "workflowTrigger": "schedule"
 }
