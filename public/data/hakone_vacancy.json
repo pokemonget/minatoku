@@ -2,11 +2,6 @@
   "records": [
     {
       "facility": "箱根 大平台みなと荘",
-      "date": "2026-10-20",
-      "status": "受付期間外"
-    },
-    {
-      "facility": "箱根 大平台みなと荘",
       "date": "2026-10-21",
       "status": "受付期間外"
     },
@@ -28,7 +23,7 @@
     {
       "facility": "箱根 大平台みなと荘",
       "date": "2026-10-25",
-      "status": "予約あり"
+      "status": "受付期間外"
     },
     {
       "facility": "箱根 大平台みなと荘",
@@ -53,7 +48,7 @@
     {
       "facility": "箱根 大平台みなと荘",
       "date": "2026-10-30",
-      "status": "一部空き"
+      "status": "予約あり"
     },
     {
       "facility": "箱根 大平台みなと荘",
@@ -154,13 +149,16 @@
       "facility": "箱根 大平台みなと荘",
       "date": "2026-11-19",
       "status": "予約あり"
+    },
+    {
+      "facility": "箱根 大平台みなと荘",
+      "date": "2026-11-20",
+      "status": "予約あり"
     }
   ],
   "lastNotified": {},
-  "flags": {
-    "2026-10-30|一部空き": true
-  },
-  "lastCheckedAt": "2026-10-20T12:06:51.174Z",
+  "flags": {},
+  "lastCheckedAt": "2026-10-20T20:14:19.440Z",
   "runSource": "github-actions",
   "workflowTrigger": "schedule"
 }
