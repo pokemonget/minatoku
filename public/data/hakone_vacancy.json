@@ -83,7 +83,7 @@
     {
       "facility": "箱根 大平台みなと荘",
       "date": "2026-12-08",
-      "status": "予約あり"
+      "status": "一部空き"
     },
     {
       "facility": "箱根 大平台みなと荘",
@@ -157,8 +157,10 @@
     }
   ],
   "lastNotified": {},
-  "flags": {},
-  "lastCheckedAt": "2026-11-22T01:40:52.400Z",
+  "flags": {
+    "2026-12-08|一部空き": true
+  },
+  "lastCheckedAt": "2026-11-22T08:50:52.249Z",
   "runSource": "github-actions",
   "workflowTrigger": "schedule"
 }
